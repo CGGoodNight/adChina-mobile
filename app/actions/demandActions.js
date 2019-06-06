@@ -7,7 +7,14 @@ import host from "../constants/host";
 const getSearchDemand = (data) => ({
   type: actionType.DemandType.GET_Search_Demand,
   data
-})
+});
+
+// 分页器发生变化
+export const onDemandSearchPageChangeAction = (start, end) => ({
+  type: actionType.DemandType.ON_DEMAND_SEARCH_PAGE_CHANGEl,
+  start,
+  end
+});
 
 // ----------------- 请求 ----------------------------
 // 获取搜索的需求

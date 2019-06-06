@@ -128,6 +128,7 @@ class Ad extends PureComponent {
     let pageSize = 12;
     let start = pageSize * (page - 1);
     let end = page * pageSize;
+    window.scrollTo(0,0);
     this.props.onSearchPageChange(start, end);
   }
 

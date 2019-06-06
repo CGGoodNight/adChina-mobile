@@ -13,7 +13,7 @@ import {
   LoadMore
 } from 'react-weui';
 
-import {getSearchDemandAction, submitDemandAction, crossIdSearchDemandAction ,modifyDemandAction} from "../../actions/demandActions";
+import {getSearchDemandAction, submitDemandAction, crossIdSearchDemandAction ,modifyDemandAction, onDemandSearchPageChangeAction} from "../../actions/demandActions";
 import {editorObjectAction} from "../../actions/detailActions";
 
 import Tabber from "../../components/Common/Tabbar";
@@ -172,6 +172,15 @@ class Demand extends PureComponent {
     });
   }
 
+  // 分页器发生变化
+  onPageChange(page) {
+    let pageSize = 8;
+    let start = pageSize * (page - 1);
+    let end = page * pageSize;
+    window.scrollTo(0,0);
+    this.props.onSearchPageChange(start, end);
+  }
+
   // 跳转到详情页
   turnToDetailPage(isAdPage, id) {
     // isAdPage 判断是进入广告页还是详情页
@@ -318,8 +327,10 @@ class Demand extends PureComponent {
               />
               <DemandItem
                 isAllDemand={this.state.isAllDemand}
-                demandList={this.props.allSearchDemand}
+                demandList={this.props.displaySearchDemand}
+                allSearchDemand={this.props.allSearchDemand}
                 turnToDetailPage={this.turnToDetailPage.bind(this)}
+                onPageChange={this.onPageChange.bind(this)}
               />
             </Article>
             <Article style={{display: this.state.tab == 1 ? null : 'none'}}>
@@ -338,6 +349,7 @@ class Demand extends PureComponent {
 
 const mapStateToProps = (state) => ({
   allSearchDemand: state.demandReducers.allSearchDemand,
+  displaySearchDemand: state.demandReducers.displaySearchDemand,
   editorObj: state.detailReducers.editorObj
 });
 
@@ -356,6 +368,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   modifyDemandData(dataObj) {
     dispatch(modifyDemandAction(dataObj));
+  },
+  onSearchPageChange(start, end) {
+    dispatch(onDemandSearchPageChangeAction(start, end));
   }
 });
 

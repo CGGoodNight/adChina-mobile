@@ -39,6 +39,7 @@ const adType = {
 // 需求页
 const DemandType = {
   GET_Search_Demand: "GET_Search_Demand",
+  ON_DEMAND_SEARCH_PAGE_CHANGEl: "ON_DEMAND_SEARCH_PAGE_CHANGEl"
 };
 
 export const actionType = {

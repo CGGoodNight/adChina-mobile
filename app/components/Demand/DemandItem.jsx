@@ -1,5 +1,5 @@
 import React from "react";
-import { WingBlank, WhiteSpace } from 'antd-mobile';
+import { WingBlank, WhiteSpace, Pagination } from 'antd-mobile';
 import { Preview, PreviewHeader, PreviewFooter, PreviewBody, PreviewItem, PreviewButton } from 'react-weui';
 
 const MainDemand = props => {
@@ -37,6 +37,15 @@ const MainDemand = props => {
           </div>
         ))
       }
+      {/* 分页器 */}
+      <Pagination 
+        total={Math.ceil(props.allSearchDemand.length/8)}
+        current={1}
+        onChange={(page) => props.onPageChange(page) }
+        locale={{
+          prevText: '上一页',
+          nextText: '下一页',
+      }} />
     </div>
   )
 };
