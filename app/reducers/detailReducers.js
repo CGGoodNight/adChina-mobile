@@ -2,7 +2,8 @@ import {actionType} from "../constants/actionType";
 
 const defaultState = {
   adDetail: [],
-  demandDetail: []
+  demandDetail: [],
+  editorObj: {}
 };
 
 export default (state = defaultState, action) => {
@@ -21,6 +22,15 @@ export default (state = defaultState, action) => {
       const newState = JSON.parse(JSON.stringify(state));
       newState.adDetail = [];
       newState.demandDetail = [];
+      return newState;
+    }
+    case actionType.detailType.EDITOR_OBJECT: {
+      const newState = JSON.parse(JSON.stringify(state));
+      if(action.isClear) {
+        newState.editorObj = {};
+      } else {
+        newState.editorObj = action.dataObj;
+      }
       return newState;
     }
     default:

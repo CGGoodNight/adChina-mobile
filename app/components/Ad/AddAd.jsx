@@ -125,7 +125,13 @@ const AddAd = props => {
           <div style={{height: 5, backgroundColor: "#fff"}}></div>
         </List>
         <div className="add-ad-submit">
-          <Button onClick={() => props._this.submitAd()} type="primary">提交</Button>
+          {
+            props._this.state.isEditor ? 
+            <Button onClick={() => props._this.modifyAd()} type="primary">提交</Button>
+            :
+            <Button onClick={() => props._this.submitAd()} type="primary">提交</Button>
+          }
+          
           <Button onClick={ () => props._this.clearInputInfo() } type="warning">清空</Button>
         </div>
       </div>

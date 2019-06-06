@@ -40,13 +40,13 @@ export const submitDemandAction = (dataObj) => {
   return dispatch => {
     let name = dataObj.addName;
     let type = dataObj.addType;
-    let size = dataObj.size;
+    let size = dataObj.addSize;
     let exposureDay = dataObj.addDay;
     let exposureHour = dataObj.addHour;
     let tel = dataObj.addTel;
     let price = dataObj.addPrice;
     let content = dataObj.addDetail;
-    let traffic = dataObj.traffic;
+    let traffic = dataObj.addTraffic;
     axios({
       method: "post",
       url: host + "/api/demands",
@@ -94,6 +94,51 @@ export const crossIdSearchDemandAction = (id) => {
     }).catch(err => {
       Toast.hide();
       Toast.fail("没有搜索到指定id的需求", 1.5);
+    })
+  }
+}
+
+// 修改需求
+export const modifyDemandAction = (dataObj) => {
+  return dispatch => {
+    let name = dataObj.addName;
+    let type = dataObj.addType;
+    let size = dataObj.addSize;
+    let exposureDay = dataObj.addDay;
+    let exposureHour = dataObj.addHour;
+    let tel = dataObj.addTel;
+    let price = dataObj.addPrice;
+    let content = dataObj.addDetail;
+    let traffic = dataObj.addTraffic;
+    axios({
+      method: "patch",
+      url: host + "/api/demands/" + dataObj.modifyId,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("token")
+      },
+      data: {
+        name,
+        type,
+        minArea: size,
+        exposureDay,
+        exposureHour,
+        traffic,
+        tel,
+        price,
+        content
+      }
+    }).then(res => {
+      if (res.status === 204) {
+        Toast.hide();
+        Toast.success("修改成功！", 1.5);
+        setTimeout(() => {
+          hashHistory.push("/my");
+        }, 1500);
+      }
+    }).catch(err => {
+      Toast.hide();
+      Toast.fail("修改失败！", 1.5);
     })
   }
 }

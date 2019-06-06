@@ -25,8 +25,10 @@ import {
   crossIdSearchAdAction, 
   uploadAdImageAction,
   clearImageUrl,
-  submitAdAction
+  submitAdAction,
+  modifyAdAction
 } from "../../actions/adActions";
+import {editorObjectAction} from "../../actions/detailActions";
 
 function closest(el, selector) {
   const matchesSelector = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector;
@@ -59,6 +61,10 @@ class Ad extends PureComponent {
       isSearchFocus: false,
       // 搜索框的值
       searchBarValue: "",
+
+      // EditorAd
+      isEditor: false,
+      modifyId: 0,
 
       //AddAd
       addName: "",
@@ -159,6 +165,14 @@ class Ad extends PureComponent {
     });
   }
 
+  // ModifyAd
+  modifyAd() {
+    Toast.loading("上传中...", 999, () => {
+      Toast.fail("上传失败！", 1.2);
+    });
+    this.props.modifyAdData(this.state);
+  }
+
   // AddAd
   // 广告图片上传触发
   onFilesChange = (files, type, index) => {
@@ -249,11 +263,62 @@ class Ad extends PureComponent {
 
   // 生命周期函数
   componentDidMount() {
-    // 获取所有广告
-    this.props.getSearchAdData(this.state);
-    this.setState({
-      isAllAd: true
-    });
+
+    // 如果是进入编辑页就不用在获取所有的广告，直接跳转
+    if(this.props.params.editor === "1") {
+
+      let editorObj = this.props.editorObj;
+      //判断是否为空 解决不想修改返回到搜索tab0时报错的现象
+      if(JSON.stringify(editorObj) == "{}") {
+        // 获取所有广告
+        this.props.getSearchAdData(this.state);
+        this.setState({
+          isAllAd: true
+        });
+        return;
+      }
+      // antd mobile组件的显示图片
+      let filesData = [];
+      editorObj.images.map((item, index) => {
+        let obj = {
+          url: `http://images.adchina.club/${item.image}`
+        };
+        filesData.push(obj);
+      });
+
+      // uploadImg是存放的{ "" , ""} 而原始数据是对象数组
+      let uploadImage = [];
+      editorObj.images.map((item, index) => {
+        uploadImage.push(item.image);
+      });
+      this.setState({
+        tab: 1,
+        //EditorAd
+        isEditor: true,
+        modifyId: editorObj.info_id,
+        addName: editorObj.name,
+        addTel: editorObj.tel,
+        addAddress: editorObj.address,
+        addPrice: editorObj.price,
+        addTraffic: editorObj.traffic,
+        addSize: editorObj.maxArea,
+        addType: editorObj.type,
+        addDay: `${editorObj.exposureDay}`,
+        addHour: `${editorObj.exposureHour}`,
+        addDetail: `${editorObj.content}`,
+        uploadImg: uploadImage,
+
+        files: filesData
+      });
+      this.props.clearEditorObject();
+
+    } else {
+      // 获取所有广告
+      this.props.getSearchAdData(this.state);
+      this.setState({
+        isAllAd: true
+      });
+    }
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -397,7 +462,8 @@ const mapStateToProps = state => ({
   displaySearchAd: state.adReducers.displaySearchAd,
   allSearchAd: state.adReducers.allSearchAd,
   uploadImgUrl: state.adReducers.uploadImgUrl,
-  progressValue: state.adReducers.progressValue
+  progressValue: state.adReducers.progressValue,
+  editorObj: state.detailReducers.editorObj
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -418,6 +484,12 @@ const mapDispatchToProps = (dispatch) => ({
   },
   submitAdData(dataObj) {
     dispatch(submitAdAction(dataObj));
+  },
+  modifyAdData(dataObj) {
+    dispatch(modifyAdAction(dataObj));
+  },
+  clearEditorObject() {
+    dispatch(editorObjectAction({}, true));
   }
 });
 

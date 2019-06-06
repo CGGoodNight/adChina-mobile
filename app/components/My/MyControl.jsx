@@ -107,7 +107,7 @@ const MyControl = props => {
                   <List.Item key={index}>
                     <div className="ad-content">
                       <p>
-                      {index + 1}. {item.name} 
+                      {`${item.info_id}. ${item.name}`}
                       <span style={{color: "#f40", marginLeft: "0.5rem"}}>
                         {
                           item.status === "未审核" ? "(未审核)" : ""
@@ -133,7 +133,7 @@ const MyControl = props => {
                 props.myDemand.map((item, index) => (
                   <List.Item key={index}>
                     <div className="ad-content">
-                      <p>{index + 1}. {item.name}</p>
+                      <p>{`${item.info_id}. ${item.name}`}</p>
                     </div>
                   </List.Item>
                 ))

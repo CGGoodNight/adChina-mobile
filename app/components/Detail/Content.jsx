@@ -79,7 +79,17 @@ const Content = props => {
               <span className="sum">{displayData.price}</span>
             </div>
             <div>
-              <Button type="warning" style={ props.page === 1 ? {} : {display: "none"} } >立即购买</Button>
+              {
+                props.userInfo.id === displayData.user_id ?
+                <Button 
+                  type="warning" 
+                  style={ props.page === 1 ? {} : {display: "none"} }
+                  onClick={() => props.turnToEditorPage(displayData, 1)}
+                 >立即修改</Button>
+                :
+                <Button type="warning" style={ props.page === 1 ? {} : {display: "none"} } >立即购买</Button>
+              }
+              
             </div>
           </WingBlank>
         </div>
@@ -184,8 +194,28 @@ const Content = props => {
       </ul>
       <div className="ad-control">
         <WingBlank>
-          <Button type="warning" style={ props.page === 1 ? {} : {display: "none"} } >立即购买</Button>
-          <Button type={ props.page === 1 ? "" : "warning" } >发送私信</Button>
+          {
+            props.userInfo.id === displayData.user_id ?
+            <Button 
+              type="warning" 
+              style={ props.page === 1 ? {} : {display: "none"} }
+              onClick={() => props.turnToEditorPage(displayData, 1)}
+               >立即修改</Button>
+            :
+            <Button type="warning" style={ props.page === 1 ? {} : {display: "none"} } >立即购买</Button>
+          }
+          {
+            props.userInfo.id === displayData.user_id ?
+              props.page === 1 ?
+              ""
+              :
+              <Button 
+                type="warning"
+                onClick={() => props.turnToEditorPage(displayData, 2)}
+              >立即修改</Button>
+            :
+            <Button type={ props.page === 1 ? "" : "warning" } >发送私信</Button>
+          }
         </WingBlank>
       </div>
     </div>

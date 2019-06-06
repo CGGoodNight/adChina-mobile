@@ -19,6 +19,13 @@ export const clearDetailAction = () => ({
   type: actionType.detailType.CLEAR_DETAIL
 });
 
+// 传递编辑的内容
+export const editorObjectAction = (dataObj, isClear) => ({
+  type: actionType.detailType.EDITOR_OBJECT,
+  dataObj,
+  isClear
+})
+
 // ----------------- 请求 ----------------------------
 
 // 根据id获取广告详情

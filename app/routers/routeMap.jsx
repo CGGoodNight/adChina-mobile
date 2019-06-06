@@ -17,8 +17,8 @@ class RouteMap extends Component {
           <Route path="/login" component={Login} />
           <Route path="/detail/:page/:id" component={Detail} />
           <Route path="/my" component={My} />
-          <Route path="/ad" component={Ad} />
-          <Route path="/demand" component={Demand} />
+          <Route path="/ad(/:editor)" component={Ad} />
+          <Route path="/demand(/:editor)" component={Demand} />
         </Route>
       </Router>
     );

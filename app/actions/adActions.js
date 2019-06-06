@@ -143,7 +143,6 @@ export const submitAdAction = (dataObj) => {
       item = addStr + str[1];
       imagesArr.push({"image": item});
     });
-
     axios({
       method: "post",
       url: host + "/api/adverts",
@@ -180,6 +179,63 @@ export const submitAdAction = (dataObj) => {
 
   }
 };
+
+// 修改广告
+export const modifyAdAction = (dataObj) => {
+  return dispatch => {
+    let name = dataObj.addName;
+    let address = dataObj.addAddress;
+    let type = dataObj.addType;
+    let maxArea = dataObj.addSize;
+    let exposureDay = dataObj.addDay;
+    let exposureHour = dataObj.addHour;
+    let tel = dataObj.addTel;
+    let price = dataObj.addPrice;
+    let content = dataObj.addDetail;
+    let images = dataObj.uploadImg;
+    let traffic = dataObj.addTraffic;
+    let imagesArr = [];
+    images.map((item, index) => {
+      let str = item;
+      const addStr = "adchina_adverts/";
+      str = str.split("adchina_adverts/");
+      item = addStr + str[1];
+      imagesArr.push({"image": item});
+    });
+    axios({
+      method: "patch",
+      url: host + "/api/adverts/" + dataObj.modifyId,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("token")
+      },
+      data: {
+        name,
+        address,
+        type,
+        maxArea,
+        exposureDay,
+        exposureHour,
+        tel,
+        price,
+        content,
+        traffic,
+        images: imagesArr
+      }
+    }).then(res => {
+      if (res.status === 204) {
+        Toast.hide();
+        Toast.success("修改成功！", 1.5);
+        setTimeout(() => {
+          hashHistory.push("/my");
+        }, 1500);
+      }
+    }).catch(err => {
+      Toast.hide();
+        Toast.fail("修改失败！请查看自己的输入是否有误，例如：电话不能超过11位。", 2);
+    })
+  }
+}
 
 
 

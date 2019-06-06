@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import {hashHistory} from "react-router";
 
 import Header from "../../components/Common/Header";
 import Content from "../../components/Detail/Content";
 import { getUserInfoAction } from '../../actions/loginActions';
-import {getAdDetailAction, getDemandDetailAction, clearDetailAction } from "../../actions/detailActions";
+import {getAdDetailAction, getDemandDetailAction, clearDetailAction, editorObjectAction } from "../../actions/detailActions";
 
 import { LoadMore } from 'react-weui';
 
@@ -23,6 +24,26 @@ class Detail extends PureComponent {
     this.setState({
       currentImagePage: index + 1
     });
+  }
+
+  // 跳转到广告/需求修改页
+
+  turnToEditorPage(dataObj, page) {
+    if(page === 1) {
+      // 跳转到广告编辑页
+      // 第二个参数为editor 1为编辑 0为常态
+      hashHistory.push("/ad/1");
+      // 无法通过路由将对象传递过去 但是可以通过redux传递过去 第二个参数是是否清空
+      this.props.editorObject(dataObj, false);
+      
+    } else {
+      // 跳转到广告编辑页
+      // 第二个参数为editor 1为编辑 0为常态
+      hashHistory.push("/demand/1");
+      // 无法通过路由将对象传递过去 但是可以通过redux传递过去 第二个参数是是否清空
+      this.props.editorObject(dataObj, false);
+    }
+    
   }
 
   // 生命周期函数
@@ -78,15 +99,19 @@ class Detail extends PureComponent {
         {
           this.state.page === 1 ?
             <Content
+              userInfo={this.props.userInfo}
               page = {this.state.page}
               adDetail = {this.props.adDetail}
               onCurrentImageChange={this.onCurrentImageChange.bind(this)}
               currentImagePage={this.state.currentImagePage}
+              turnToEditorPage={this.turnToEditorPage.bind(this)}
             />
             :
             <Content
+              userInfo={this.props.userInfo}
               page = {this.state.page}
               demandDetail = {this.props.demandDetail}
+              turnToEditorPage={this.turnToEditorPage.bind(this)}
             />
         }
       </div>
@@ -113,6 +138,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   clearDetailData() {
     dispatch(clearDetailAction());
+  },
+  editorObject(dataObj, isClear) {
+    dispatch(editorObjectAction(dataObj, isClear));
   }
 });
 

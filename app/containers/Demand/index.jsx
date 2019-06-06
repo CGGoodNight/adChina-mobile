@@ -13,7 +13,8 @@ import {
   LoadMore
 } from 'react-weui';
 
-import {getSearchDemandAction, submitDemandAction, crossIdSearchDemandAction} from "../../actions/demandActions";
+import {getSearchDemandAction, submitDemandAction, crossIdSearchDemandAction ,modifyDemandAction} from "../../actions/demandActions";
+import {editorObjectAction} from "../../actions/detailActions";
 
 import Tabber from "../../components/Common/Tabbar";
 import SelectHeader from "../../components/Demand/SelectHeader";
@@ -38,6 +39,9 @@ class Demand extends PureComponent {
       traffic: 0,
       price_start: 0,
       price_end: 0,
+
+      isEditor: false,
+      modifyId: 0,
 
       // AdDemand
       addName: "",
@@ -120,6 +124,13 @@ class Demand extends PureComponent {
     });
   }
   
+  // ModifyDemand
+  modifyDemand() {
+    Toast.loading("上传中...", 999, () => {
+      Toast.fail("上传失败！", 1.2);
+    });
+    this.props.modifyDemandData(this.state);
+  }
 
   // 上传需求位
   submitDemand() {
@@ -169,11 +180,44 @@ class Demand extends PureComponent {
 
   // 生命周期函数
   componentDidMount() {
-    // 获取全部需求信息
-    this.props.getSearchDemandData(this.state);
-    this.setState({
-      isAllDemand: true
-    });
+
+    // 如果是进入编辑页就不用在获取所有的广告，直接跳转
+    if(this.props.params.editor === "1") {
+      let editorObj = this.props.editorObj;
+
+      if(JSON.stringify(editorObj) == "{}") {
+        // 获取所有广告
+        this.props.getSearchAdData(this.state);
+        this.setState({
+          isAllAd: true
+        });
+        return;
+      }
+
+      this.setState({
+        tab: 1,
+        //EditorAd
+        isEditor: true,
+        modifyId: editorObj.info_id,
+        addName: editorObj.name,
+        addTel: editorObj.tel,
+        addPrice: editorObj.price,
+        addTraffic: editorObj.traffic,
+        addSize: editorObj.minArea,
+        addType: editorObj.type,
+        addDay: `${editorObj.exposureDay}`,
+        addHour: `${editorObj.exposureHour}`,
+        addDetail: `${editorObj.content}`,
+      });
+      this.props.clearEditorObject();
+
+    } else {
+      // 获取全部需求信息
+      this.props.getSearchDemandData(this.state);
+      this.setState({
+        isAllDemand: true
+      });
+    }
   }
   render() {
 
@@ -293,7 +337,8 @@ class Demand extends PureComponent {
 }
 
 const mapStateToProps = (state) => ({
-  allSearchDemand: state.demandReducers.allSearchDemand
+  allSearchDemand: state.demandReducers.allSearchDemand,
+  editorObj: state.detailReducers.editorObj
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -306,6 +351,12 @@ const mapDispatchToProps = (dispatch) => ({
   crossIdSearchDemandData(id) {
     dispatch(crossIdSearchDemandAction(id))
   },
+  clearEditorObject() {
+    dispatch(editorObjectAction({}, true));
+  },
+  modifyDemandData(dataObj) {
+    dispatch(modifyDemandAction(dataObj));
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Demand);
