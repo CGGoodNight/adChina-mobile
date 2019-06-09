@@ -153,6 +153,26 @@ export const getUserInfoAction = () => {
   }
 };
 
+// 退出登陆
+export const exitLoginAction = () => {
+  const token = localStorage.getItem("token");
+  localStorage.removeItem("token");
+  return dispatch => {
+    dispatch(loginOutAction());
+    axios({
+      method: "get",
+      url: host + "/api/user/logout",
+      headers: {
+        'Authorization':  token
+      }
+    }).then(res => {
+      Toast.success(res.data.message);
+    }).catch(error => {
+      console.log(error);
+    })
+  }
+};
+
 
 
 

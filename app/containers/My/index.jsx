@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import {hashHistory} from "react-router";
 // tabber
 import Tabber from "../../components/Common/Tabbar";
-import { getUserInfoAction } from '../../actions/loginActions';
+import { getUserInfoAction, exitLoginAction } from '../../actions/loginActions';
 import {getMyAdAction, getMyDemandAction, submitMyModifyInfoAction, uploadQRCodeAction, uploadAvatarAction} from "../../actions/myActions";
 
-import Avatar from '../../components/My/Avatar';
-import MyControl from "../../components/My/MyControl";
+import MyHeader from '../../components/My/MyHeader';
 import NoLogin from "../../components/My/NoLogin";
+import MyContent from "../../components/My/MyContent";
 
 import { LoadMore } from 'react-weui';
 
@@ -37,6 +37,8 @@ class My extends PureComponent {
       modal1: false,
       files: [],
       files2: [],
+      // 1.广告 2.需求 3. 订单 4.私信 5.个人中心 6.系统信息
+      page: 5,
     }
   }
 
@@ -170,9 +172,9 @@ class My extends PureComponent {
     }
   };
 
-  // 当手风琴改变的时候
-  onPanelChange(key) {
-    // 未登录的时候不能点击手风琴
+  // 当header里面的图片点击时候触发
+  onFunIconClick(page) {
+    // 未登录的时候不能点击
     if(!this.props.isLogin) {
       alert('操作失败', '必须登录才能进行操作，是否登录？', [
         { text: '取消', onPress: () => {} },
@@ -180,42 +182,25 @@ class My extends PureComponent {
       ]);
       return;
     }
-
-    if(key.length === 0) {
-      // 全部关闭的时候
-    } else {
-      // 0.个人中心 1.我的广告 2.我的需求 3.私信列表 4.订单列表 5.系统信息
-      switch (parseInt(key[0])) {
-        case 0: {
-          break;
-        }
-        case 1: {
-          this.props.getMyAdData();
-          break;
-        }
-        case 2: {
-          this.props.getMyDemandData();
-          break;
-        }
-        case 3: {
-          break;
-        }
-        case 4: {
-          break;
-        }
-        case 5: {
-          break;
-        }
-        default: {
-          break;
-        }
-      }
+    if(page === 1) {
+      this.props.getMyAdData();
     }
+    if(page === 2) {
+      this.props.getMyDemandData();
+    }
+    this.setState({
+      page
+    });
   }
 
   // 未登录的时候点击头像跳转到登录页
   turnToLoginPage() {
     hashHistory.push('/login');
+  }
+
+  // 退出登陆
+  exitLoginClick() {
+    this.props.exitLogin();
   }
 
   // 生命周期函数
@@ -283,9 +268,13 @@ class My extends PureComponent {
         {
           localStorage.getItem("token") ?
             this.props.isLogin ?
-              <Avatar
+              <MyHeader
                 userInfo={this.props.userInfo}
-              />
+                onFunIconClick={this.onFunIconClick.bind(this)}
+                showModal1={this.showModal1}
+              >
+                666
+              </MyHeader>
               :
               <div>
                 <div className="my-header">
@@ -305,14 +294,18 @@ class My extends PureComponent {
         }
 
 
-        <MyControl
-          onPanelChange={this.onPanelChange.bind(this)}
-          userInfo={this.props.userInfo}
-          myAd={this.props.myAd}
-          myDemand={this.props.myDemand}
-
-          showModal1={this.showModal1}
-        />
+        {
+          this.props.isLogin ?
+            <MyContent
+              page = {this.state.page}
+              myAd={this.props.myAd}
+              myDemand={this.props.myDemand}
+              userInfo={this.props.userInfo}
+              exitLoginClick={this.exitLoginClick.bind(this)}
+            />
+          :
+          ""
+        }
         <div className="bottom-white"></div>
         <Tabber page="my" />
       </div>
@@ -346,6 +339,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   uploadAvatarData(formData) {
     dispatch(uploadAvatarAction(formData));
+  },
+  exitLogin() {
+    dispatch(exitLoginAction());
   }
 });
 

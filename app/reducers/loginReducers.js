@@ -45,6 +45,10 @@ export default (state = defaultState, action) => {
     case actionType.loginType.LOGIN_OUT: {
       const newState = JSON.parse(JSON.stringify(state));
       newState.isLogin = false;
+      newState.verificationCodeData = "",
+      newState.turnToLoginPage = false;
+      newState.registerMail = "";
+      newState.userInfo = [];
       return newState;
     }
     default:

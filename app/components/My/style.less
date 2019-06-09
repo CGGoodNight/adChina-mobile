@@ -1,140 +1,105 @@
-// ------Avatar.jsx------
-.my-header {
+
+// ------myheader-----
+.myheader-box {
+  position: relative;
+}
+.myheader-box .set {
+  position: absolute;
+  top: -3.5rem;
+  right: 1rem;
+}
+.myheader-box .set span {
+  font-size: 1.4rem;
+  color: #333;
+}
+
+.myheader-content {
+  background-color: #fff;
+  border: 1px solid #eee;
+  margin-top: 4rem; 
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  background-color: #fff;
   align-items: center;
-  height: 45px;
-  font-size: 18px;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px #ddd;
 }
-.my-avatar {
-  background-color: #fff;
-  padding: 0.5rem 0;
-}
-.avatar-img {
+.myheader-content .avatar {
   width: 4rem;
   height: 4rem;
   border-radius: 50%;
   overflow: hidden;
+  margin-top: -2rem;
 }
-.my-avatar .avatar-img img {
+.myheader-content .avatar img {
   width: 100%;
   height: 100%;
 }
-.my-avatar>div {
-  display: flex;
-}
-.my-avatar .title {
-  width: 7.5rem;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  margin-left: 0.5rem;
-}
-.my-avatar .title h3 {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 0.9rem;
-  margin-bottom: 0.2rem;
-}
-.my-avatar .title p {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-size: 0.7rem;
-  margin-top: 0.2rem;
-}
-// ------Avatar.jsx------
-
-
-// ------MyControl.jsx------
-.my-info {
-  padding-top: 0.5rem;
-  background-color: #fff;
-}
-.my-info>h2 {
-  color: #888;
-  padding: 0.5rem 1rem;
-}
-.my-control .no-full {
-  margin-left: 2.8rem;
-}
-.divider {
-  height: 1px;
-  background-color: rgb(232,232,232);
-}
-.my-info .item {
-  display: flex;
-  position: relative;
-}
-.my-info .item .icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  //height: 3rem;
-  padding: 0 0.4rem;
-}
-.my-info .item .icon .iconfont {
-  font-size: 0.75rem;
-  color: #f40;
-}
-.my-info .item .info {
-  //line-height: 3rem;
-  font-size: 0.7rem;
-}
-.my-info .item .info .iconfont {
-  position: absolute;
-  right: 1rem;
-}
-.my-control .modify-btn {
-  margin: 0.3rem 0;
-}
-
-.my-control .am-button-warning {
-  background-color: #f40;
-  height: 1.6rem;
-  font-size: 0.8rem;
-  display: block;
-  line-height: 1.6rem;
-  transform: translateY(-0.2rem);
-}
-.my-control .am-button-warning {
-  background-color: #f40;
-}
-.my-control .am-button::before {
-  border: none!important;
-}
-
-
-
-.my-control .info-header {
+// 未登录下的样式
+.myheader-content .avatar span {
   display: inline-block;
-  font-size: 20px;
-  color: #f40;
+  width: 100%;
+  height: 100%;
+  font-size: 2.85rem;
 }
-.my-control .info-header .title {
-  color: #000;
-  font-size: 18px;
-  margin-left: 10px;
+.myheader-content .name {
+  font-weight: 600;
+  color: #333;
+  font-size: 1rem;
+  margin-top: 0.5rem;
 }
-
-
-//-------- 我的广告
-.ad-content p{
+.myheader-content .info {
   font-size: 0.7rem;
-  margin-left: 0.8rem;
+  color: #666;
+  margin: 0.3rem 0 0.6rem 0;
 }
-
-// ------MyControl.jsx------
-
-
-.my-avatar .no-login {
+.myheader-content .info span {
+  width: 1px;
+  height: 0.55rem;
+  display: inline-block;
+  background-color: #999;
+}
+.myheader-content .info div {
+  display: inline;
+  padding: 0.5rem;
+}
+.myheader-content .all-fun {
   display: flex;
+  width: 100%;
+}
+.myheader-content .all-fun .item {
+  width: 25%;
+  box-sizing:border-box;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-.my-avatar .no-login .iconfont {
-  font-size: 3rem;
-  color: #f40;
+.myheader-content .all-fun .item span {
+  font-size: 0.7rem;
+  color: #666;
+  display: inline-block;
+  margin: 0.3rem 0 0.8rem 0;
 }
+.myheader-content .all-fun .item img {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+// ------myheader-----
+
+// ------mycontent-----
+
+.my-content {
+  background-color: #fff;
+  border: 1px solid #eee;
+  margin: 0.4rem 0;
+  padding-bottom: 0.5rem; 
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px #ddd;
+}
+.my-content .am-list-item .am-list-line .am-list-content {
+  color: #444;
+}
+// ------mycontent-----
+

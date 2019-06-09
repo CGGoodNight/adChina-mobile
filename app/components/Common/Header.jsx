@@ -45,7 +45,7 @@ const Header = props => {
             :
             [
               <Icon key="0" type="search" style={{ marginRight: '16px' }}/>,
-              <span onClick={() => {hashHistory.push("/login")}} key="1" style={{fontSize: 22}} className="iconfont icon-yonghu1"></span>
+              <span onClick={() => {hashHistory.push("/login")}} key="1" style={{fontSize: 24}} className="iconfont icon-yonghu1"></span>
             ]
         }
       >
