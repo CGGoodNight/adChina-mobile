@@ -1,6 +1,7 @@
 import React from "react";
 import { WingBlank, WhiteSpace, Button } from 'antd-mobile';
-import { Page ,Preview, PreviewHeader, PreviewFooter, PreviewBody, PreviewItem, PreviewButton } from 'react-weui';
+import { Preview, PreviewHeader, PreviewFooter, PreviewBody, PreviewItem, PreviewButton } from 'react-weui';
+import {hashHistory} from "react-router";
 
 const MainDemand = props => {
   return(
@@ -11,7 +12,7 @@ const MainDemand = props => {
             热门需求位
             <span className="iconfont icon-remen">
             </span>
-            <div className="title-more">
+            <div onClick={() => hashHistory.push("/demand")} className="title-more">
               更多需求 >
             </div>
           </div>
@@ -37,7 +38,7 @@ const MainDemand = props => {
           </div>
         ))
       }
-      <Button>点击查看更多</Button>
+      <Button onClick={() => hashHistory.push("/demand")}>点击查看更多</Button>
     </div>
   )
 };

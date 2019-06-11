@@ -1,5 +1,6 @@
 import React from "react";
 import { WingBlank, Pagination } from 'antd-mobile';
+import {hashHistory} from "react-router";
 
 const AdItem = props => {
   return (
@@ -7,7 +8,7 @@ const AdItem = props => {
       <WingBlank>
         <div className="title adPage">
           {props.isAllAd ? "所有广告位" : "搜索到的广告位" }
-          <div className="title-more">
+          <div onClick={() => hashHistory.push("/my/1")} className="title-more">
             查看我的广告 >
           </div>
         </div>

@@ -24,7 +24,8 @@ const detailType = {
 // 个人信息页
 const myType = {
   GET_MY_ALL_AD: "GET_MY_ALL_AD",
-  GET_MY_ALL_Demand: "GET_MY_ALL_Demand"
+  GET_MY_ALL_Demand: "GET_MY_ALL_Demand",
+  GET_MY_ORDER: "GET_MY_ORDER"
 };
 
 // 广告页

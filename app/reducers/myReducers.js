@@ -3,6 +3,9 @@ import {actionType} from "../constants/actionType";
 const defaultState = {
   myAd: [],
   myDemand: [],
+  myOrder: [],
+  userPayModal: false,
+  userPayUrl: ""
 };
 
 export default (state = defaultState, action) => {
@@ -15,6 +18,11 @@ export default (state = defaultState, action) => {
     case actionType.myType.GET_MY_ALL_Demand: {
       const newState = JSON.parse(JSON.stringify(state));
       newState.myDemand = action.data;
+      return newState;
+    }
+    case actionType.myType.GET_MY_ORDER: {
+      const newState = JSON.parse(JSON.stringify(state));
+      newState.myOrder = action.data;
       return newState;
     }
     default:

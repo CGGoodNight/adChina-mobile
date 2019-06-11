@@ -166,7 +166,7 @@ export const exitLoginAction = () => {
         'Authorization':  token
       }
     }).then(res => {
-      Toast.success(res.data.message);
+      Toast.success(res.data.message, 1.2);
     }).catch(error => {
       console.log(error);
     })

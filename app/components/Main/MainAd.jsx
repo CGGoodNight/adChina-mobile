@@ -1,5 +1,6 @@
 import React from "react";
 import { Carousel, WingBlank, Button } from 'antd-mobile';
+import {hashHistory} from "react-router";
 import "./style.less";
 
 const MainAd = props => {
@@ -29,7 +30,7 @@ const MainAd = props => {
             <div className="title">
               热门广告位
               <span className="iconfont icon-remen"></span>
-              <div className="title-more">
+              <div onClick={ () => hashHistory.push("/ad") } className="title-more">
                 更多广告 >
               </div>
             </div>
@@ -59,7 +60,7 @@ const MainAd = props => {
             </div>
           </WingBlank>
         </div>
-        <Button className="ad-bottom-look-more">点击查看更多</Button>
+        <Button onClick={() => hashHistory.push("/ad")} className="ad-bottom-look-more">点击查看更多</Button>
       </div>
   )
 };

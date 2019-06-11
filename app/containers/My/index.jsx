@@ -4,7 +4,19 @@ import {hashHistory} from "react-router";
 // tabber
 import Tabber from "../../components/Common/Tabbar";
 import { getUserInfoAction, exitLoginAction } from '../../actions/loginActions';
-import {getMyAdAction, getMyDemandAction, submitMyModifyInfoAction, uploadQRCodeAction, uploadAvatarAction} from "../../actions/myActions";
+import {
+  getMyAdAction, 
+  getMyDemandAction, 
+  submitMyModifyInfoAction, 
+  uploadQRCodeAction, 
+  uploadAvatarAction, 
+  getMyOrderAction,
+  changeOrderStateAction,
+  changeOrderStateToPayAction,
+  downloadBaseImageAction,
+  viewSellerImageAction,
+  uploadAdImageAction
+} from "../../actions/myActions";
 
 import MyHeader from '../../components/My/MyHeader';
 import NoLogin from "../../components/My/NoLogin";
@@ -39,9 +51,64 @@ class My extends PureComponent {
       files2: [],
       // 1.广告 2.需求 3. 订单 4.私信 5.个人中心 6.系统信息
       page: 5,
+      // 订单页获取
+      isBuyPage: true,
+      // 防止用户多次点击
+      closeBtn: false
     }
   }
 
+  // 获取订单数据
+  getMyOrder(v) {
+    this.setState({
+      isBuyPage: v[0]
+    }, () => {
+      this.props.getMyOrderData(this.state.isBuyPage);
+    })
+  }
+  onOrderPageChange(v) {
+    this.setState({
+      isBuyPage: v[0]
+    });
+  }
+  // 改变订单状态
+  onOrderStateChange(order_id) {
+    if(this.props.userInfo.qrcode === "images.adchina.club/") {
+      Toast.fail("亲，需要去个人中心上传收款二维码图片才能继续进行操作哟");
+      return;
+    }
+    this.setState({
+      closeBtn: true
+    });
+    setTimeout(() => {
+      this.setState({
+        closeBtn: false
+      });
+    }, 20000)
+    this.props.changeOrderState(order_id);
+  }
+
+  // 支付单独改变状态
+  onOrderStateChangeTopayData(order_id) {
+    if(this.props.userInfo.qrcode === "images.adchina.club/") {
+      info("亲，需要去个人中心上传收款二维码图片才能继续进行操作哟");
+      return;
+    }
+    this.props.onOrderStateChangeTopay(order_id);
+  }
+
+  // 上传效果图
+  sellerUploadImg(order_id) {
+    let _that = this;
+    let input = document.getElementById("sellerUpload");
+    input.click();
+    input.onchange = function() {
+      let file = this.files[0];
+      let formData = new FormData(input);
+      formData.append('file', file);
+      _that.props.uploadAdImage(formData, order_id);
+    }
+  }
 
   // 修改个人信息的Modal
   showModal1 = key => (e) => {
@@ -188,6 +255,9 @@ class My extends PureComponent {
     if(page === 2) {
       this.props.getMyDemandData();
     }
+    if(page === 3) {
+      this.props.getMyOrderData(true);
+    }
     this.setState({
       page
     });
@@ -208,6 +278,11 @@ class My extends PureComponent {
     // localStorage 中有 token 使用该token登录
     if(localStorage.getItem("token")) {
       this.props.getUserInfoData();
+    }
+    if(this.props.params.page) {
+      setTimeout(() => {
+        this.onFunIconClick(parseInt(this.props.params.page));
+      }, 200);
     }
   }
 
@@ -300,12 +375,23 @@ class My extends PureComponent {
               page = {this.state.page}
               myAd={this.props.myAd}
               myDemand={this.props.myDemand}
+              myOrder={this.props.myOrder}
               userInfo={this.props.userInfo}
               exitLoginClick={this.exitLoginClick.bind(this)}
+              getMyOrder={this.getMyOrder.bind(this)}
+              isBuyPage={this.state.isBuyPage}
+              onOrderPageChange={this.onOrderPageChange.bind(this)}
+              onOrderStateChange={this.onOrderStateChange.bind(this)}
+              onOrderStateChangeTopayData={this.onOrderStateChangeTopayData.bind(this)}
+              downloadBaseImage={this.props.downloadBaseImage}
+              viewSellerImage={this.props.viewSellerImage}
+              sellerUploadImg={this.sellerUploadImg.bind(this)}
+              closeBtn={this.state.closeBtn}
             />
           :
           ""
         }
+        <input style={{display: "none"}} type="file" id="sellerUpload"/>
         <div className="bottom-white"></div>
         <Tabber page="my" />
       </div>
@@ -318,7 +404,8 @@ const mapStateToProps = state => ({
   isLogin: state.loginReducers.isLogin,
   myAd: state.myReducers.myAd,
   myDemand: state.myReducers.myDemand,
-  progressValue: state.adReducers.progressValue
+  progressValue: state.adReducers.progressValue,
+  myOrder: state.myReducers.myOrder
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -342,7 +429,25 @@ const mapDispatchToProps = (dispatch) => ({
   },
   exitLogin() {
     dispatch(exitLoginAction());
-  }
+  },
+  getMyOrderData(isBuyPage) {
+    dispatch(getMyOrderAction(isBuyPage))
+  },
+  changeOrderState(order_id) {
+    dispatch(changeOrderStateAction(order_id));
+  },
+  onOrderStateChangeTopay(order_id) {
+    dispatch(changeOrderStateToPayAction(order_id));
+  },
+  downloadBaseImage(order_id) {
+    dispatch(downloadBaseImageAction(order_id));
+  },
+  viewSellerImage(order_id) {
+    dispatch(viewSellerImageAction(order_id));
+  },
+  uploadAdImage(formData, order_id) {
+    dispatch(uploadAdImageAction(formData, order_id));
+  },
 });
 
 export default connect(

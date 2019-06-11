@@ -1,6 +1,7 @@
 import React from "react";
 import { WingBlank, WhiteSpace, Pagination } from 'antd-mobile';
 import { Preview, PreviewHeader, PreviewFooter, PreviewBody, PreviewItem, PreviewButton } from 'react-weui';
+import {hashHistory} from "react-router";
 
 const MainDemand = props => {
   return(
@@ -11,7 +12,7 @@ const MainDemand = props => {
             {
               props.isAllDemand ? "所有需求位" : "搜索到的广告"
             }
-            <div style={{bottom: "-0.7rem"}} className="title-more">
+            <div onClick={() => hashHistory.push("/my/2")} style={{bottom: "-0.7rem"}} className="title-more">
               查看我的需求 >
             </div>
           </div>

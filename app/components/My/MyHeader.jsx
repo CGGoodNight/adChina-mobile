@@ -2,7 +2,7 @@ import React from 'react';
 import "./style.less";
 import { WingBlank } from 'antd-mobile';
 // 功能图片
-import adImg from "../../../static/image/png/guanggao.png";
+import adImg from "../../../static/image/png/ad.png";
 import demandImg from "../../../static/image/png/xuqiugujia.png";
 import dingdanImg from "../../../static/image/png/dingdan.png";
 import sixinImg from "../../../static/image/png/wodesixin.png";
@@ -10,6 +10,9 @@ import sixinImg from "../../../static/image/png/wodesixin.png";
 const MyHeader = props => {
   return (
     <div className="myheader-box">
+      <div onClick={ props.showModal1("modal1") } className="set">
+        <span className="iconfont icon-shezhi"></span>
+      </div>
       <WingBlank>
         <div className="myheader-content">
           <div className="avatar">

@@ -16,7 +16,7 @@ class RouteMap extends Component {
           <IndexRoute component={Main} />
           <Route path="/login" component={Login} />
           <Route path="/detail/:page/:id" component={Detail} />
-          <Route path="/my" component={My} />
+          <Route path="/my(/:page)" component={My} />
           <Route path="/ad(/:editor)" component={Ad} />
           <Route path="/demand(/:editor)" component={Demand} />
         </Route>

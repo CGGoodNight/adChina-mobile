@@ -2,7 +2,7 @@ import React from "react";
 import { WingBlank } from 'antd-mobile';
 import {hashHistory} from "react-router";
 // 功能图片
-import adImg from "../../../static/image/png/guanggao.png";
+import adImg from "../../../static/image/png/ad.png";
 import demandImg from "../../../static/image/png/xuqiugujia.png";
 import dingdanImg from "../../../static/image/png/dingdan.png";
 import sixinImg from "../../../static/image/png/wodesixin.png";
