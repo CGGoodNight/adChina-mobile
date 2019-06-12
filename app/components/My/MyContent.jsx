@@ -169,9 +169,48 @@ function getContent(page, props) {
     )
   }
   if(page === 6) {
-    return (
-      <div>6</div>
-    )
+    if(props.isSystemInfoDetail) {
+      return (
+        <div className="system-info-detail">
+          <div className="header">
+            <h2>关于参加中国大学生计算机设计大赛通知</h2>
+            <p>adchina发布者</p>
+            <p>2019-04-29</p>
+          </div>
+          <div style={{marginTop: "0.6rem", fontSize: "0.7rem"}} dangerouslySetInnerHTML={{__html: props.systemInfo[0].content}}>
+            
+          </div>
+        </div>
+      )
+    } else {
+      return (
+        <div className="system-info">
+          {
+            props.systemInfo.map((item, index) => (
+              <div key={index}>
+                <Preview>
+                  <PreviewHeader>
+                    <PreviewItem onClick={() => {}} label="" value={item.title} />
+                  </PreviewHeader>
+                  <PreviewBody>
+                    <PreviewItem label="发布时间" value={item.pubtime} />
+                    <PreviewItem label="发布者" value={item.pubpeople} />
+                    <PreviewItem label="简介" value={item.description} />
+                  </PreviewBody>
+                  <PreviewFooter>
+                    <PreviewButton primary={false} onClick={() => props.turnToSystemInfoDetail(item.id)}>
+                      查看详情
+                    </PreviewButton>
+                  </PreviewFooter>
+                </Preview>
+                <WhiteSpace></WhiteSpace>
+              </div>
+            ))
+          }
+        </div>
+      )
+    }
+    
   }
 }
 

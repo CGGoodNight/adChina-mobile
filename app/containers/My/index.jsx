@@ -15,7 +15,8 @@ import {
   changeOrderStateToPayAction,
   downloadBaseImageAction,
   viewSellerImageAction,
-  uploadAdImageAction
+  uploadAdImageAction,
+  getSystemInfoAction
 } from "../../actions/myActions";
 
 import MyHeader from '../../components/My/MyHeader';
@@ -54,8 +55,18 @@ class My extends PureComponent {
       // 订单页获取
       isBuyPage: true,
       // 防止用户多次点击
-      closeBtn: false
+      closeBtn: false,
+      // 系统信息是否是详情页
+      isSystemInfoDetail: false
     }
+  }
+
+  // 跳转到系统信息详情
+  turnToSystemInfoDetail(id) {
+    this.props.getSystemInfo(true, id);
+    this.setState({
+      isSystemInfoDetail: true
+    })
   }
 
   // 获取订单数据
@@ -241,14 +252,6 @@ class My extends PureComponent {
 
   // 当header里面的图片点击时候触发
   onFunIconClick(page) {
-    // 未登录的时候不能点击
-    if(!this.props.isLogin) {
-      alert('操作失败', '必须登录才能进行操作，是否登录？', [
-        { text: '取消', onPress: () => {} },
-        { text: '前往', onPress: () => hashHistory.push("/login") },
-      ]);
-      return;
-    }
     if(page === 1) {
       this.props.getMyAdData();
     }
@@ -257,6 +260,15 @@ class My extends PureComponent {
     }
     if(page === 3) {
       this.props.getMyOrderData(true);
+      this.setState({
+        isBuyPage: true
+      });
+    }
+    if(page === 6) {
+      this.props.getSystemInfo(false, "");
+      this.setState({
+        isSystemInfoDetail: false
+      })
     }
     this.setState({
       page
@@ -275,8 +287,11 @@ class My extends PureComponent {
 
   // 生命周期函数
   componentDidMount() {
+    window.scrollTo(0,0);
     // localStorage 中有 token 使用该token登录
-    if(localStorage.getItem("token")) {
+    if(!localStorage.getItem("token")) {
+      
+    } else {
       this.props.getUserInfoData();
     }
     if(this.props.params.page) {
@@ -377,6 +392,7 @@ class My extends PureComponent {
               myDemand={this.props.myDemand}
               myOrder={this.props.myOrder}
               userInfo={this.props.userInfo}
+              systemInfo={this.props.systemInfo}
               exitLoginClick={this.exitLoginClick.bind(this)}
               getMyOrder={this.getMyOrder.bind(this)}
               isBuyPage={this.state.isBuyPage}
@@ -387,6 +403,8 @@ class My extends PureComponent {
               viewSellerImage={this.props.viewSellerImage}
               sellerUploadImg={this.sellerUploadImg.bind(this)}
               closeBtn={this.state.closeBtn}
+              isSystemInfoDetail={this.state.isSystemInfoDetail}
+              turnToSystemInfoDetail={this.turnToSystemInfoDetail.bind(this)}
             />
           :
           ""
@@ -405,7 +423,8 @@ const mapStateToProps = state => ({
   myAd: state.myReducers.myAd,
   myDemand: state.myReducers.myDemand,
   progressValue: state.adReducers.progressValue,
-  myOrder: state.myReducers.myOrder
+  myOrder: state.myReducers.myOrder,
+  systemInfo: state.myReducers.systemInfo
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -448,6 +467,9 @@ const mapDispatchToProps = (dispatch) => ({
   uploadAdImage(formData, order_id) {
     dispatch(uploadAdImageAction(formData, order_id));
   },
+  getSystemInfo(isSearch, value) {
+    dispatch(getSystemInfoAction(isSearch, value));
+  }
 });
 
 export default connect(

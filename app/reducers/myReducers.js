@@ -5,7 +5,8 @@ const defaultState = {
   myDemand: [],
   myOrder: [],
   userPayModal: false,
-  userPayUrl: ""
+  userPayUrl: "",
+  systemInfo: []
 };
 
 export default (state = defaultState, action) => {
@@ -23,6 +24,11 @@ export default (state = defaultState, action) => {
     case actionType.myType.GET_MY_ORDER: {
       const newState = JSON.parse(JSON.stringify(state));
       newState.myOrder = action.data;
+      return newState;
+    }
+    case actionType.myType.GET_SYSTEM_INFO: {
+      const newState = JSON.parse(JSON.stringify(state));
+      newState.systemInfo = action.data;
       return newState;
     }
     default:

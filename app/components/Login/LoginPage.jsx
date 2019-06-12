@@ -25,8 +25,10 @@ const LoginPage = props => {
               type="password"
               placeholder="请输入密码"
               onChange={(value) => props.onLoginPasswordChange(value)}
-              onVirtualKeyboardConfirm={() => {
-                props.loginBtnClick();
+              onKeyDown={(e) => {
+                if(e.keyCode === 13) {
+                  props.loginBtnClick();
+                }
               }}
 
             >

@@ -25,7 +25,8 @@ const detailType = {
 const myType = {
   GET_MY_ALL_AD: "GET_MY_ALL_AD",
   GET_MY_ALL_Demand: "GET_MY_ALL_Demand",
-  GET_MY_ORDER: "GET_MY_ORDER"
+  GET_MY_ORDER: "GET_MY_ORDER",
+  GET_SYSTEM_INFO: "GET_SYSTEM_INFO"
 };
 
 // 广告页

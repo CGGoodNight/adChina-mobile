@@ -31,6 +31,7 @@ class Main extends PureComponent {
 
   // 生命周期函数
   componentDidMount() {
+    window.scrollTo(0,0);
     // localStorage 中有 token 使用该token登录
     if(localStorage.getItem("token")) {
       this.props.getUserInfoData();

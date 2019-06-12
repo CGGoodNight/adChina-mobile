@@ -21,7 +21,10 @@ const getMyOrder = (data) => ({
   type: actionType.myType.GET_MY_ORDER,
   data
 });
-
+const getSystemInfo = (data) => ({
+  type: actionType.myType.GET_SYSTEM_INFO,
+  data
+});
 
 // ----------------- 请求 ----------------------------
 
@@ -306,5 +309,42 @@ export const uploadAdImageAction = (formData, order_id = 1) => {
       console.log(error);
     })
 
+  }
+};
+
+// 获取系统信息  isSerach为false时为获取部分信息 为true则是获取改系统信息的全部信息 value是某个系统信息的id
+export const getSystemInfoAction = (isSerach = false, value = "") => {
+  return dispatch => {
+    if(isSerach) {
+      axios({
+        method: "get",
+        url: host + "/api/systemNotifications/" + value,
+        headers: {
+          'Authorization': localStorage.getItem("token")
+        }
+      }).then(res => {
+        if(res.status === 200) {
+          let data = [res.data.data];
+          dispatch(getSystemInfo(data));
+        }
+      }).catch((err) => {
+        error("没有查询到对应的通知");
+        console.log(err);
+      })
+    } else {
+      axios({
+        method: "get",
+        url: host + "/api/systemNotifications",
+        headers: {
+          'Authorization': localStorage.getItem("token")
+        }
+      }).then(res => {
+        if(res.status === 200) {
+          dispatch(getSystemInfo(res.data.data));
+        }
+      }).catch((err) => {
+        console.log(err);
+      })
+    }
   }
 };

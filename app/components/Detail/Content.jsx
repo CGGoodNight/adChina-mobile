@@ -1,7 +1,7 @@
 import React from "react";
-import { Carousel, WingBlank, Button } from 'antd-mobile';
-import { LoadMore, Page } from 'react-weui';
-
+import { Carousel, WingBlank, Button, Modal } from 'antd-mobile';
+import { LoadMore } from 'react-weui';
+const alert = Modal.alert;
 import "./style.less";
 
 
@@ -87,7 +87,10 @@ const Content = props => {
                   onClick={() => props.turnToEditorPage(displayData, 1)}
                  >立即修改</Button>
                 :
-                <Button type="warning" style={ props.page === 1 ? {} : {display: "none"} } >立即购买</Button>
+                <Button type="warning" 
+                onClick={props.showModal("modal1")}
+                style={ props.page === 1 ? {} : {display: "none"}
+               } >立即购买</Button>
               }
               
             </div>
@@ -199,10 +202,18 @@ const Content = props => {
             <Button 
               type="warning" 
               style={ props.page === 1 ? {} : {display: "none"} }
-              onClick={() => props.turnToEditorPage(displayData, 1)}
-               >立即修改</Button>
+              onClick={() => {
+                alert('确定删除该广告么？', "", [
+                  { text: '取消', onPress: () => {} },
+                  { text: '确定', onPress: () => props.deleteAd(displayData.info_id)}
+                ])
+              }}
+               >立即删除</Button>
             :
-            <Button type="warning" style={ props.page === 1 ? {} : {display: "none"} } >立即购买</Button>
+            <Button type="warning" 
+            onClick={props.showModal("modal1")}
+            style={ props.page === 1 ? {} : {display: "none"} }
+             >立即购买</Button>
           }
           {
             props.userInfo.id === displayData.user_id ?
@@ -211,8 +222,13 @@ const Content = props => {
               :
               <Button 
                 type="warning"
-                onClick={() => props.turnToEditorPage(displayData, 2)}
-              >立即修改</Button>
+                onClick={() => {
+                  alert('确定删除改需求么？', "", [
+                    { text: '取消', onPress: () => {} },
+                    { text: '确定', onPress: () => props.deleteDemand(displayData.info_id)}
+                  ])
+                }}
+              >立即删除</Button>
             :
             <Button type={ props.page === 1 ? "" : "warning" } >发送私信</Button>
           }

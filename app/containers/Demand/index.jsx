@@ -189,7 +189,7 @@ class Demand extends PureComponent {
 
   // 生命周期函数
   componentDidMount() {
-
+    window.scrollTo(0,0);
     // 如果是进入编辑页就不用在获取所有的广告，直接跳转
     if(this.props.params.editor === "1") {
       let editorObj = this.props.editorObj;
@@ -313,7 +313,14 @@ class Demand extends PureComponent {
         <Tab>
           <NavBar>
             <NavBarItem active={this.state.tab == 0} onClick={e=>this.setState({tab:0})}>搜索需求</NavBarItem>
-            <NavBarItem active={this.state.tab == 1} onClick={e=>this.setState({tab:1})}>添加需求</NavBarItem>
+            <NavBarItem active={this.state.tab == 1} onClick={e=>{
+              // localStorage 中有 token 使用该token登录
+              if(!localStorage.getItem("token")) {
+                Toast.fail("请先登录！", 1.5);
+                return;
+              }
+              this.setState({tab:1})
+            }}>添加需求</NavBarItem>
           </NavBar>
           <TabBody>
             <Article style={{display: this.state.tab == 0 ? null : 'none'}}>

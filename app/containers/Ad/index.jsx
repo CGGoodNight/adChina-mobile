@@ -9,7 +9,7 @@ import {
   Article,
   LoadMore
 } from 'react-weui';
-import { Modal, WingBlank, Toast, Progress } from 'antd-mobile';
+import { Modal, Toast, Progress } from 'antd-mobile';
 const alert = Modal.alert;
 
 // tabber
@@ -258,13 +258,14 @@ class Ad extends PureComponent {
       addDay: "0",
       addHour: "0",
       addDetail: "",
-      uploadImg: []
+      uploadImg: [],
+      files: []
     })
   }
 
   // 生命周期函数
   componentDidMount() {
-
+    window.scrollTo(0,0);
     // 如果是进入编辑页就不用在获取所有的广告，直接跳转
     if(this.props.params.editor === "1") {
 
@@ -420,7 +421,14 @@ class Ad extends PureComponent {
         <Tab>
           <NavBar>
             <NavBarItem active={this.state.tab == 0} onClick={e=>this.setState({tab:0})}>搜索广告</NavBarItem>
-            <NavBarItem active={this.state.tab == 1} onClick={e=>this.setState({tab:1})}>添加广告</NavBarItem>
+            <NavBarItem active={this.state.tab == 1} onClick={e=>{
+              // localStorage 中有 token 使用该token登录
+              if(!localStorage.getItem("token")) {
+                Toast.fail("请先登录！", 1.5);
+                return;
+              }
+              this.setState({tab:1})
+            }}>添加广告</NavBarItem>
           </NavBar>
           <TabBody>
             <Article style={{display: this.state.tab == 0 ? null : 'none'}}>
