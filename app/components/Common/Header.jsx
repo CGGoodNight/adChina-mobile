@@ -1,5 +1,6 @@
 import React from 'react';
-import { NavBar, Icon } from 'antd-mobile';
+import { NavBar, Icon, Modal } from 'antd-mobile';
+const operation = Modal.operation;
 import {hashHistory} from "react-router";
 import "./Header.less";
 
@@ -11,8 +12,9 @@ const Header = props => {
         icon={
           props.headerPage === 1 ?
             // 主页
-            <span style={{fontSize: 22}} className="iconfont icon-caidan">
-            </span>
+            // <span style={{fontSize: 22}} className="iconfont icon-caidan">
+            // </span>
+            <span></span>
             :
             props.headerPage === 2 ?
               // 详情页
@@ -20,8 +22,9 @@ const Header = props => {
               </span>
               :
               // 其他
-              <span style={{fontSize: 22}} className="iconfont icon-caidan">
-              </span>
+              <span></span>
+              // <span style={{fontSize: 22}} className="iconfont icon-caidan">
+              // </span>
         }
         onLeftClick={() => {
           switch (props.headerPage) {
@@ -37,14 +40,20 @@ const Header = props => {
         rightContent={
           props.isLogin ?
             [
-              <Icon key="0" type="search" style={{ marginRight: '16px' }}/>,
+              <Icon onClick={() => operation([
+                { text: '搜索广告', onPress: () => hashHistory.push("/ad") },
+                { text: '搜索需求', onPress: () => hashHistory.push("/demand") },
+              ])} key="0" type="search" style={{ marginRight: '16px' }}/>,
               <span className="header-avatar" key="1">
                 <img src={`http://${props.userInfo.avatar}`} alt=""/>
               </span>
             ]
             :
             [
-              <Icon key="0" type="search" style={{ marginRight: '16px' }}/>,
+              <Icon onClick={() => operation([
+                { text: '搜索广告', onPress: () => hashHistory.push("/ad") },
+                { text: '搜索需求', onPress: () => hashHistory.push("/demand") },
+              ])} key="0" type="search" style={{ marginRight: '16px' }}/>,
               <span onClick={() => {hashHistory.push("/login")}} key="1" style={{fontSize: 24}} className="iconfont icon-yonghu1"></span>
             ]
         }

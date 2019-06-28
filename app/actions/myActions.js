@@ -2,7 +2,7 @@ import axios from 'axios';
 import { actionType } from '../constants/actionType'
 import { Toast, Modal } from 'antd-mobile';
 const alert = Modal.alert;
-// import {hashHistory} from "react-router";
+import {hashHistory} from "react-router";
 import host from "../constants/host";
 import {getUserInfoAction} from "./loginActions";
 import {onProgressChange} from "./adActions";
@@ -25,6 +25,15 @@ const getSystemInfo = (data) => ({
   type: actionType.myType.GET_SYSTEM_INFO,
   data
 });
+const getMessageTotal = (accept, send) => ({
+  type: actionType.myType.GET_MESSAGE_TOTAL,
+  accept,
+  send
+})
+export const getMessageDetail = (data, clear=false) => ({
+  type: actionType.myType.GET_MESSAGE_DETAIL,
+  data
+})
 
 // ----------------- 请求 ----------------------------
 
@@ -346,5 +355,116 @@ export const getSystemInfoAction = (isSerach = false, value = "") => {
         console.log(err);
       })
     }
+  }
+};
+
+// 获取全部私信内容
+export const getMessageAction = () => {
+  return dispatch => {
+
+    let getAcceptdData = () => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "get",
+          url: host + "/api/users/contacts/Received",
+          headers: {
+            'Authorization': localStorage.getItem("token")
+          }
+        }).then(res => {
+          resolve(res);
+        }).catch(err => {
+          reject(err);
+        })
+      })
+    };
+
+    let getSendData = () => {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: "get",
+          url: host + "/api/users/contacts/Sended",
+          headers: {
+            'Authorization': localStorage.getItem("token")
+          }
+        }).then(res => {
+          resolve(res);
+        }).catch(err => {
+          reject(err);
+        })
+      })
+    };
+
+    Promise.all([getAcceptdData(), getSendData()]).then((result) => {
+      dispatch(getMessageTotal(result[0].data.data, result[1].data.data));
+    }).catch(err => {
+      console.log(err);
+    })
+
+
+
+
+  }
+}
+
+// 获取与某人私信的详细内容
+export const getMessageDetailAction = (id) => {
+  return dispatch => {
+    axios({
+      method: "get",
+      url: host + "/api/users/contacts/"  + id + "/detail",
+      headers: {
+        'Authorization': localStorage.getItem("token")
+      }
+    }).then(res => {
+      dispatch(getMessageDetail(res.data.data));
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+}
+
+// 回复私信
+export const submitReplyContentAction = (other_id, replyContent) => {
+  return dispatch => {
+    if(replyContent === "") {
+      Toast.fail("发送内容不能为空", 1.5);
+      return;
+    }
+    dispatch(submitPrivateLetter(other_id, replyContent, true));
+  }
+};
+
+// 发送私信
+export const submitPrivateLetter = (to, content, isReply=false) => {
+  return dispatch => {
+    if(content === "") {
+      Toast.fail("发送的内容不能为空！", 1.5);
+      return;
+    }
+    axios({
+      method: "post",
+      url: host + "/api/users/contacts/"+ to +"/create",
+      headers: {
+        'Authorization': localStorage.getItem("token")
+      },
+      data: {
+        content
+      }
+    }).then(res => {
+      if(res.status === 201) {
+        if(isReply) {
+          Toast.success(res.data.message, 1.5);
+          dispatch(getMessageDetailAction(to));
+        } else {
+          Toast.success(res.data.message, 1.5);
+          setTimeout(() => {
+            hashHistory.push("/my/4");
+          }, 1500);
+        }
+      }
+    }).catch((err) => {
+      Toast.fail("发送失败或该用户已注销", 1.5);
+      console.log(err);
+    })
   }
 };

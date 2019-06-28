@@ -3,10 +3,13 @@ import { connect } from 'react-redux';
 import {hashHistory} from "react-router";
 import {Toast, Modal, ImagePicker, Progress } from "antd-mobile";
 const alert = Modal.alert;
+const prompt = Modal.prompt;
 import Header from "../../components/Common/Header";
+import FooterDemo from "../../components/Common/FooterDemo";
 import Content from "../../components/Detail/Content";
 import { getUserInfoAction } from '../../actions/loginActions';
 import {getAdDetailAction, getDemandDetailAction, clearDetailAction, editorObjectAction, deleteAdAction, deleteDemandAction, uploadAdImageAction } from "../../actions/detailActions";
+import {submitPrivateLetter} from "../../actions/myActions";
 
 import { LoadMore } from 'react-weui';
 
@@ -133,6 +136,21 @@ class Detail extends PureComponent {
     
   }
 
+  // 发送私信按钮点击
+  onSubmitMessageBtnClick(id) {
+    prompt(
+      '发送私信',
+      '',
+      [
+        { text: '取消' },
+        { text: '提交', onPress: value => {
+          this.props.submitPrivateLetterData(id, value);
+        } },
+      ],
+      '',
+    )
+  }
+
   // 生命周期函数
   componentDidMount() {
     // localStorage 中有 token 使用该token登录
@@ -228,6 +246,7 @@ class Detail extends PureComponent {
               deleteAd={this.props.deleteAd}
               deleteDemand={this.props.deleteDemand}
               showModal={this.showModal}
+              onSubmitMessageBtnClick={this.onSubmitMessageBtnClick.bind(this)}
             />
             :
             <Content
@@ -238,8 +257,10 @@ class Detail extends PureComponent {
               deleteAd={this.props.deleteAd}
               deleteDemand={this.props.deleteDemand}
               showModal={this.showModal}
+              onSubmitMessageBtnClick={this.onSubmitMessageBtnClick.bind(this)}
             />
         }
+        <FooterDemo />
       </div>
     )
   }
@@ -278,6 +299,9 @@ const mapDispatchToProps = (dispatch) => ({
   uploadAdImage(id, formData) {
     dispatch(uploadAdImageAction(id, formData))
   },
+  submitPrivateLetterData(to, content) {
+    dispatch(submitPrivateLetter(to, content))
+  }
 });
 
 export default connect(

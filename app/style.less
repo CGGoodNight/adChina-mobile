@@ -4,6 +4,18 @@
   touch-action: pan-y;
 }
 
+.clearfix::before,
+.clearfix::after {
+  content: "";
+  display: table; /*触发BFC*/
+}
+.clearfix::after {
+  clear: both;
+}
+.clearfix {
+  zoom: 1; /*解决IE6,7的兼容性*/
+}
+
 // rem的使用
 html {
   font-size : 20px;

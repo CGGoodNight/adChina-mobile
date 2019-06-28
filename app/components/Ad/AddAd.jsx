@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, WingBlank, List, InputItem, Picker, TextareaItem, ImagePicker  } from "antd-mobile";
 import {type, time} from "./selectOption";
+import {hashHistory} from "react-router";
 
 const AddAd = props => {
   return (
@@ -8,7 +9,7 @@ const AddAd = props => {
       <WingBlank>
         <div className="title adPage">
           添加广告位
-          <div className="title-more">查看我的广告 ></div>
+          <div onClick={() => {hashHistory.push("my/1")}} className="title-more">查看我的广告 ></div>
         </div>
       </WingBlank>
       <div className="add-ad-input">

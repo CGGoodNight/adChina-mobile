@@ -6,7 +6,9 @@ const defaultState = {
   myOrder: [],
   userPayModal: false,
   userPayUrl: "",
-  systemInfo: []
+  systemInfo: [],
+  totalMessage: [],
+  detailMessage: []
 };
 
 export default (state = defaultState, action) => {
@@ -29,6 +31,22 @@ export default (state = defaultState, action) => {
     case actionType.myType.GET_SYSTEM_INFO: {
       const newState = JSON.parse(JSON.stringify(state));
       newState.systemInfo = action.data;
+      return newState;
+    }
+    case actionType.myType.GET_MESSAGE_TOTAL: {
+      const newState = JSON.parse(JSON.stringify(state));
+      let total = action.accept.concat(action.send);
+      newState.totalMessage = total;
+      return newState;
+    }
+    case actionType.myType.GET_MESSAGE_DETAIL: {
+      const newState = JSON.parse(JSON.stringify(state));
+      if(action.clear) {
+        newState.detailMessage = [];
+        return newState;
+      }
+      action.data.reverse();
+      newState.detailMessage = action.data;
       return newState;
     }
     default:

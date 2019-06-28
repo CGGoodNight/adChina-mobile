@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import {hashHistory} from "react-router";
 // tabber
 import Tabber from "../../components/Common/Tabbar";
+import FooterDemo from "../../components/Common/FooterDemo";
 import { getUserInfoAction, exitLoginAction } from '../../actions/loginActions';
 import {
   getMyAdAction, 
@@ -16,7 +17,11 @@ import {
   downloadBaseImageAction,
   viewSellerImageAction,
   uploadAdImageAction,
-  getSystemInfoAction
+  getSystemInfoAction,
+  getMessageAction,
+  getMessageDetailAction,
+  getMessageDetail,
+  submitReplyContentAction
 } from "../../actions/myActions";
 
 import MyHeader from '../../components/My/MyHeader';
@@ -57,8 +62,37 @@ class My extends PureComponent {
       // 防止用户多次点击
       closeBtn: false,
       // 系统信息是否是详情页
-      isSystemInfoDetail: false
+      isSystemInfoDetail: false,
+      // 私信列表是否处于详情页
+      isMessageDetail: false,
+      // 私信列表回复内容
+      replyContent: ""
+
     }
+  }
+  // 当回复内容框里内容改变时
+  onReplyContentChange (value) {
+    this.setState({
+      replyContent: value
+    })
+  }
+  // 当回复按钮点击的时候
+  onReplyBtnClick(id) {
+    this.props.submitReplyContentData(id ,this.state.replyContent);
+  }
+  // 私信全部列表点击进入私信详情列表
+  messageToDetailClick(id) {
+    this.setState({
+      isMessageDetail: true
+    });
+    this.props.getMessageDetailData(id);
+  }
+  // 返回全部私信列表
+  goBackMessageTotal() {
+    this.setState({
+      isMessageDetail: false
+    });
+    this.props.clearMessageDetail();
   }
 
   // 跳转到系统信息详情
@@ -264,6 +298,9 @@ class My extends PureComponent {
         isBuyPage: true
       });
     }
+    if(page === 4) {
+      this.props.getMessageData();
+    }
     if(page === 6) {
       this.props.getSystemInfo(false, "");
       this.setState({
@@ -405,11 +442,20 @@ class My extends PureComponent {
               closeBtn={this.state.closeBtn}
               isSystemInfoDetail={this.state.isSystemInfoDetail}
               turnToSystemInfoDetail={this.turnToSystemInfoDetail.bind(this)}
+              totalMessage={this.props.totalMessage}
+              isMessageDetail={this.state.isMessageDetail}
+              messageToDetailClick={this.messageToDetailClick.bind(this)}
+              detailMessage={this.props.detailMessage}
+              goBackMessageTotal={this.goBackMessageTotal.bind(this)}
+              onReplyContentChange={this.onReplyContentChange.bind(this)}
+              replyContent = {this.state.replyContent}
+              onReplyBtnClick = {this.onReplyBtnClick.bind(this)}
             />
           :
           ""
         }
         <input style={{display: "none"}} type="file" id="sellerUpload"/>
+        <FooterDemo />
         <div className="bottom-white"></div>
         <Tabber page="my" />
       </div>
@@ -424,7 +470,9 @@ const mapStateToProps = state => ({
   myDemand: state.myReducers.myDemand,
   progressValue: state.adReducers.progressValue,
   myOrder: state.myReducers.myOrder,
-  systemInfo: state.myReducers.systemInfo
+  systemInfo: state.myReducers.systemInfo,
+  totalMessage: state.myReducers.totalMessage,
+  detailMessage: state.myReducers.detailMessage
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -469,6 +517,18 @@ const mapDispatchToProps = (dispatch) => ({
   },
   getSystemInfo(isSearch, value) {
     dispatch(getSystemInfoAction(isSearch, value));
+  },
+  getMessageData() {
+    dispatch(getMessageAction());
+  },
+  getMessageDetailData(id) {
+    dispatch(getMessageDetailAction(id));
+  },
+  clearMessageDetail() {
+    dispatch(getMessageDetail([], true));
+  },
+  submitReplyContentData(id, content) {
+    dispatch(submitReplyContentAction(id, content))
   }
 });
 

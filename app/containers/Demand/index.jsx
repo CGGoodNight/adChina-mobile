@@ -17,6 +17,7 @@ import {getSearchDemandAction, submitDemandAction, crossIdSearchDemandAction ,mo
 import {editorObjectAction} from "../../actions/detailActions";
 
 import Tabber from "../../components/Common/Tabbar";
+import FooterDemo from "../../components/Common/FooterDemo";
 import SelectHeader from "../../components/Demand/SelectHeader";
 import FuzzySearch from "../../components/Demand/FuzzySearch";
 import AccurateSearch from "../../components/Demand/AccurateSearch";
@@ -347,6 +348,7 @@ class Demand extends PureComponent {
             </Article>
           </TabBody>
         </Tab>
+        <FooterDemo />
         <div className="bottom-white"></div>
         <Tabber page="xuqiu" />
       </div>

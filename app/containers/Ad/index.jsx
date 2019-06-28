@@ -14,6 +14,7 @@ const alert = Modal.alert;
 
 // tabber
 import Tabber from "../../components/Common/Tabbar";
+import FooterDemo from "../../components/Common/FooterDemo";
 import Select from "../../components/Ad/Select";
 import ExactFindWrapper from "../../components/Ad/ExactFind";
 import AdItem from "../../components/Ad/AdItem";
@@ -460,6 +461,7 @@ class Ad extends PureComponent {
             </Article>
           </TabBody>
         </Tab>
+        <FooterDemo />
         <div className="bottom-white"></div>
         <Tabber page="ad" />
       </div>

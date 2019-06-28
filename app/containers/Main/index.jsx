@@ -6,6 +6,7 @@ import { LoadMore } from 'react-weui';
 
 // 导入无状态组件
 import Header from "../../components/Common/Header";
+import FooterDemo from "../../components/Common/FooterDemo";
 import MainAd from "../../components/Main/MainAd";
 import MainDemand from "../../components/Main/MainDemand";
 
@@ -70,6 +71,7 @@ class Main extends PureComponent {
           demandList={this.props.demandList}
           turnToDetailPage={this.turnToDetailPage.bind(this)}
         />
+        <FooterDemo />
         <Tabber page="home" />
         <div className="bottom-white"></div>
       </div>

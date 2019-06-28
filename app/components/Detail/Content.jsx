@@ -230,7 +230,9 @@ const Content = props => {
                 }}
               >立即删除</Button>
             :
-            <Button type={ props.page === 1 ? "" : "warning" } >发送私信</Button>
+            <Button 
+            onClick={() => {props.onSubmitMessageBtnClick(displayData.user_id)}}
+            type={ props.page === 1 ? "" : "warning" } >发送私信</Button>
           }
         </WingBlank>
       </div>

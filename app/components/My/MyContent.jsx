@@ -1,6 +1,7 @@
 import React from 'react';
-import {WingBlank, List, Picker, Button, WhiteSpace} from "antd-mobile";
+import {WingBlank, List, Picker, Button, WhiteSpace, TextareaItem} from "antd-mobile";
 import { Preview, PreviewHeader, PreviewFooter, PreviewBody, PreviewItem, PreviewButton, LoadMore } from 'react-weui';
+import {getRemainderTime} from "./getRemainderTime";
 import {hashHistory} from "react-router";
 const Item = List.Item;
 
@@ -24,6 +25,7 @@ const isBuypage = [
     },
   ]
 ];
+
 
 function getContent(page, props) {
   if(page === 1) {
@@ -121,9 +123,158 @@ function getContent(page, props) {
     )
   }
   if(page === 4) {
-    return (
-      <div>4</div>
-    )
+    if(props.isMessageDetail) {
+      // 没有内容是显示加载中
+      if(props.detailMessage.length === 0) {
+        return <List renderHeader={() => `回复私信`} className="my-list">
+          <div>
+            <TextareaItem
+              title=""
+              placeholder="输入回复内容"
+              // value={props._this.state.addDetail}
+              // onChange={ (value) => props._this.setState({
+              //   addDetail: value
+              // }) }
+              rows={4}
+              count={100}
+            />
+          </div>
+          <div className="reply-btn clearfix">
+            <Button type="warning">回复</Button>
+            <Button onClick={() => {props.goBackMessageTotal()}}>返回</Button>
+          </div>
+          <LoadMore>加载中...</LoadMore>
+        </List>
+      }
+      return (
+        <div>
+          <List renderHeader={() => `回复私信`} className="my-list">
+            <div>
+              <TextareaItem
+                title=""
+                placeholder="输入回复内容"
+                value={props.replyContent}
+                onChange={(value) => {props.onReplyContentChange(value)}}
+                rows={4}
+                count={100}
+              />
+            </div>
+            <div className="reply-btn clearfix">
+              <Button onClick={() => {
+                let myId = props.userInfo.id;
+                if(myId === props.detailMessage[0].apply_id) {
+                  props.onReplyBtnClick(props.detailMessage[0].accept_id);
+                } else {
+                  props.onReplyBtnClick(props.detailMessage[0].apply_id);
+                }
+                
+                }} type="warning">回复</Button>
+              <Button onClick={() => {props.goBackMessageTotal()}}>返回</Button>
+            </div>
+            <List renderHeader={() => `全部私信（${props.detailMessage.length}）`} className="my-list">
+              {
+                props.detailMessage.map((item, index) => {
+                  return (
+                    <div key={index} className="message-detail">
+                      <div className={ props.userInfo.id === item.apply_id ? "first" : "first second"}>
+                        
+                        {
+                          props.userInfo.id === item.apply_id ?
+                            <div className="avatar-name">
+                              <div className="avatar">
+                                <img src={`http://images.adchina.club/${item.avatar}`} alt=""/>
+                              </div>
+                              <div className="name">
+                                {item.name} :
+                              </div>
+                            </div>
+                            :
+                            <div className="avatar-name">
+                              <div className="name">
+                                : {item.name}
+                              </div>
+                              <div className="avatar">
+                                <img src={`http://images.adchina.club/${item.avatar}`} alt=""/>
+                              </div>
+                            </div>
+                        }
+                        <div className="content">
+                          {item.content}
+                        </div>
+                        <div className="time">
+                          {item.pubtime}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })
+              }
+            </List>
+          </List>
+        </div>
+      )
+    } else {
+      return (
+        <div>
+          <List renderHeader={() => `我的私信（${props.totalMessage.length}）`} className="my-list">
+            <div className="messages-box clearfix">
+              {
+                props.totalMessage.map((item, index) => {
+  
+                  let releaseStr = "";
+                  let date = getRemainderTime(item.pubtime);
+                  // 判断返回的字符串
+                  if (date.year > 0) {
+                    releaseStr = date.year + "年前";
+                  } else if (date.month > 0) {
+                    releaseStr = date.month + "月前";
+                  } else if (date.day > 0) {
+                    releaseStr = date.day + "天前";
+                  } else if (date.hour > 0) {
+                    releaseStr = date.hour + "小时前";
+                  } else if (date.minute > 0) {
+                    releaseStr = date.minute + "分钟前";
+                  } else if (date.second > 0 && date.second < 10) {
+                    releaseStr = "几秒前";
+                  } else if (date.second >= 10) {
+                    releaseStr = date.second + "秒前";
+                  }
+  
+                  return (
+                    <div onClick={() => {
+                      // 判断下对方id是多少
+                      let myId = props.userInfo.id;
+                      if(myId === item.apply_id) {
+                        props.messageToDetailClick(item.accept_id);
+                      } else {
+                        props.messageToDetailClick(item.apply_id);
+                      }
+                      
+                    }} key={index} className="item clearfix">
+                      <div className="avatar">
+                        <img src={`http://images.adchina.club/${item.avatar}`} alt=""/>
+                      </div>
+                      <div className="content">
+                        <p>
+                          <strong>{item.name}</strong>
+                        </p>
+                        <p>
+                          {item.content}
+                        </p>
+                      </div>
+                      <div className="time">
+                        {releaseStr}
+                      </div>
+                    </div>
+                  )
+                })
+              }
+            </div>
+          </List>
+          
+        </div>
+      )
+    }
   }
   if(page === 5) {
     return (
