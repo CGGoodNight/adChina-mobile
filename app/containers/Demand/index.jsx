@@ -231,14 +231,6 @@ class Demand extends PureComponent {
   }
   render() {
 
-    if(this.props.allSearchDemand.length === 0) {
-      return (
-        <div>
-          <LoadMore loading>正在获取数据...</LoadMore>
-        </div>
-      )
-    }
-
     return (
       <div className="ad-box">
         {/* 模糊搜索 */}
@@ -333,13 +325,19 @@ class Demand extends PureComponent {
                 onSearchBarChange={this.onSearchBarChange.bind(this)}
                 searchBarValue={this.state.searchBarValue}
               />
-              <DemandItem
-                isAllDemand={this.state.isAllDemand}
-                demandList={this.props.displaySearchDemand}
-                allSearchDemand={this.props.allSearchDemand}
-                turnToDetailPage={this.turnToDetailPage.bind(this)}
-                onPageChange={this.onPageChange.bind(this)}
-              />
+              {
+                this.props.allSearchDemand.length === 0 ?
+                <LoadMore showLine>没有数据</LoadMore>
+                :
+                <DemandItem
+                  isAllDemand={this.state.isAllDemand}
+                  demandList={this.props.displaySearchDemand}
+                  allSearchDemand={this.props.allSearchDemand}
+                  turnToDetailPage={this.turnToDetailPage.bind(this)}
+                  onPageChange={this.onPageChange.bind(this)}
+                />
+              }
+              
             </Article>
             <Article style={{display: this.state.tab == 1 ? null : 'none'}}>
               <AddDemand

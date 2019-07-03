@@ -335,13 +335,7 @@ class Ad extends PureComponent {
   }
 
   render() {
-    if(this.props.allSearchAd.length === 0) {
-      return (
-        <div>
-          <LoadMore loading>正在获取数据...</LoadMore>
-        </div>
-      )
-    }
+
     return (
       <div className="ad-box">
         {/* 上传广告进度条 */}
@@ -442,14 +436,19 @@ class Ad extends PureComponent {
                 crossIdSearchAd={this.crossIdSearchAd.bind(this)}
                 openShowModal={this.openShowModal.bind(this)}
               />
-
-              <AdItem
-                adList={this.props.displaySearchAd}
-                allSearchAd={this.props.allSearchAd}
-                isAllAd={this.state.isAllAd}
-                turnToDetailPage={this.turnToDetailPage.bind(this)}
-                onPageChange={this.onPageChange.bind(this)}
-              />
+              {
+                this.props.allSearchAd.length === 0 ?
+                <LoadMore showLine>没有数据</LoadMore>
+                :
+                <AdItem
+                  adList={this.props.displaySearchAd}
+                  allSearchAd={this.props.allSearchAd}
+                  isAllAd={this.state.isAllAd}
+                  turnToDetailPage={this.turnToDetailPage.bind(this)}
+                  onPageChange={this.onPageChange.bind(this)}
+                />
+              }
+              
               
             </Article>
             <Article style={{display: this.state.tab == 1 ? null : 'none'}}>
