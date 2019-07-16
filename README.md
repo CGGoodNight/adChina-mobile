@@ -1,16 +1,15 @@
-## Memos
+## AdChina
 
-> 技术架构：本备忘录使用react+react-router+redux+less+ES6+webpack实现;
+> 技术架构：使用react+react-router+redux+less+ES6+webpack实现;
 
->页面UI参照：
 
-> 在线演示地址：
+> 在线演示地址：[https://www.adchina.club](https://www.adchina.club)
 
 ### 功能说明
 
+广告推送服务，让企业与商户互帮互赢
 
 
-### 待解决
 
 
 ### 本地演示方法
@@ -26,10 +25,8 @@ npm run build
 localhost:3000
 ```
 
-### 相关截图
 
 
+**PC端页面:** 
+[https://www.adchina.club](https://www.adchina.club)
 
-**移动端页面:**
-
-![移动端端页面]
