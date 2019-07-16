@@ -1,4 +1,4 @@
-## AdChina
+## AdChina Mobile
 
 > 技术架构：使用react+react-router+redux+less+ES6+webpack实现;
 
